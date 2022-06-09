@@ -1,2 +1,2 @@
-# binary-search-tree
-binary search tree implementation
+# Binary Search Tree
+binary search tree implementation written in Python3
