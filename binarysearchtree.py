@@ -29,6 +29,33 @@ class TreeNode:
         self.right = None
         self.left = None
 
+    def _children(self, data=False):
+        """
+        returns a list of children\
+        (TreeNode) objects for specific\
+        tree node.
+        """
+        children = []
+        if data is False:
+            if self.left is not None:
+                children.append(self.left)
+            else:
+                children.append("_")
+            if self.right is not None:
+                children.append(self.right)
+            else:
+                children.append("_")
+        else:
+            if self.left is not None:
+                children.append(self.left.data)
+            else:
+                children.append("_")
+            if self.right is not None:
+                children.append(self.right.data)
+            else:
+                children.append("_")
+        return children
+
 class BinarySearchTree:
     """
     representation of a binary search tree.
@@ -199,37 +226,10 @@ class BinarySearchTree:
                 return None
             for element in levels[father_level]:
                 if element != "_":
-                    if node.data in self._children(element, data=True):
+                    if node.data in element._children(data=True):
                         return element
         else:
             return None
-
-    def _children(self, node, data=False):
-        """
-        returns a list of children\
-        (TreeNode) objects for specific\
-        tree node.
-        """
-        children = []
-        if data is False:
-            if node.left is not None:
-                children.append(node.left)
-            else:
-                children.append("_")
-            if node.right is not None:
-                children.append(node.right)
-            else:
-                children.append("_")
-        else:
-            if node.left is not None:
-                children.append(node.left.data)
-            else:
-                children.append("_")
-            if node.right is not None:
-                children.append(node.right.data)
-            else:
-                children.append("_")
-        return children
 
     def bfs(self, object=False):
         """
@@ -245,7 +245,7 @@ class BinarySearchTree:
             next_level = []
             for element in level:
                 if element != "_":
-                    next_level.extend(self._children(element))
+                    next_level.extend(element._children())
                 else:
                     next_level.extend(["_", "_"])
             levels.append(level)
