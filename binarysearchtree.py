@@ -65,9 +65,29 @@ class BinarySearchTree:
     _up(self):
         returns a father of a node.
 
-    inorder(self):
+    inorder(self, root):
+        inorder traversal.
         traverse from the left subtree to\
         the root then to the right subtree.
+
+    _recurse_for_inorder(self, current, inorder):
+        recursive algorithm for the inorder traversal.
+
+    postorder(self, root):
+        postorder
+        traverse from the left subtree to\
+        the right subtree then to the root.
+
+    _recurse_for_postorder(self, current, postorder):
+        recursive algorithm for the postorder traversal.
+
+    preorder(self, root):
+        preoder traversal.
+        traverse from the root then  to the left\
+        subtree then to the right subtree.
+
+    _recurse_for_preorder(self, current, preorder):
+        recursive algorithm for the preorder traversal.
 
     nodes_num(self):
         total number of nodes in\
@@ -96,11 +116,13 @@ class BinarySearchTree:
         if self._root is not None:
             self.nodes = 1
 
-    def get_root(self):
+    def get_root(self, data=False):
         """
         returns a root of\
         the binary search tree.
         """
+        if data is True:
+            return self._root.data
         return self._root
 
     def add(self, element, start_point):
@@ -264,19 +286,72 @@ class BinarySearchTree:
                 result += "\n"
         return result[:-1]
         
-    def inorder(self):
+    def inorder(self, root):
         """
+        inorder traversal.
         traverse from the left subtree to\
         the root then to the right subtree.
         """
-        marked = []
         inorder = []
-        to_discover = []
-        nodes_num = self.nodes_num()
-        current = self._root
-        while len(inorder) != nodes_num:
-            to_discover.extend(self._children())
-            to_discover = 
+        if root == self._root.data:
+            self._recurse_for_inorder(self._root, inorder)
+        return inorder
+       
+    def _recurse_for_inorder(self, current, inorder):
+        """
+        recursive algorithm for the inorder traversal.
+        """
+        if current is not None:
+            if current.left is None:
+                self._recurse_for_inorder(current.right, inorder)
+                inorder.append(current.data)
+            elif current.right is None:
+                self._recurse_for_inorder(current.left, inorder)
+                inorder.append(current.data)
+            else:
+                self._recurse_for_inorder(current.left, inorder)
+                inorder.append(current.data)
+                self._recurse_for_inorder(current.right, inorder)
+
+    def postorder(self, root):
+        """
+        postorder
+        traverse from the left subtree to\
+        the right subtree then to the root.
+        """
+        postorder = []
+        if root == self._root.data:
+            self._recurse_for_postorder(self._root, postorder)
+        return postorder
+       
+    def _recurse_for_postorder(self, current, postorder):
+        """
+        recursive algorithm for the postorder traversal.
+        """
+        if current is not None:
+            self._recurse_for_postorder(current.left, postorder)
+            self._recurse_for_postorder(current.right, postorder)
+            postorder.append(current.data)
+
+    def preorder(self, root):
+        """
+        preoder traversal.
+        traverse from the root then  to the left\
+        subtree then to the right subtree.
+        """
+        preorder = []
+        if root == self._root.data:
+            self._recurse_for_preorder(self._root, preorder)
+        return preorder
+       
+    def _recurse_for_preorder(self, current, preorder):
+        """
+        recursive algorithm for the preorder traversal.
+        """
+        if current is not None:
+            preorder.append(current.data)
+            self._recurse_for_preorder(current.left, preorder)
+            self._recurse_for_preorder(current.right, preorder)
 
     def nodes_num(self):
         """
@@ -299,10 +374,3 @@ class BinarySearchTree:
             return tree_node.left is None and tree_node.right is None
         else:
             return None
-
-    @staticmethod
-    def _remove_empty_nodes(list):
-        for element in list[::-1]:
-            if element == "_":
-                list.remove(element)
-        return list
