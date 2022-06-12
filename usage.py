@@ -2,7 +2,7 @@
 here are some examples of binary search tree usage.
 """
 
-from binarysearchtree import BinarySearchTree
+from my_basic_bst import BinarySearchTree
 
 tree = BinarySearchTree(7)
 root = tree.get_root()
