@@ -5,7 +5,7 @@ This is a basic binary search tree implementation. While creating a tree, the us
 ## How to install
 To install binarysearchtree.py on your computer, open the terminal and write down <br />
 ```
-pip install binary-search-tree==0.1
+pip install my-basic-bst==0.1
 ```
 ## What to use it for?
 A binary search tree can help implement different searching algorithms and keep data structured and sorted.
