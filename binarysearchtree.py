@@ -6,6 +6,8 @@ binary search tree implementation.
 *    developed by maslenchenko   *
 *          with love XX          *
 ----------------------------------
+
+https://github.com/maslenchenko/binary-search-tree.git
 """
 
 class TreeNode:
@@ -123,6 +125,21 @@ class BinarySearchTree:
     _is_leaf(self, value):
         checks if tree node is leaf.
 
+    rebalance(self):
+        changes existing binary search tree.
+        returns rebalanced one.
+
+    delete_all_nodes(self):
+        deletes all nodes in binary search tree.
+        return empty tree.
+
+    _recurse_for_deleting(self, node):
+        recursive function for deleting all nodes.
+
+    delete_node(self, node):
+        deletes specific node and returns\
+        rebalanced tree.
+
     attributes:
     -----------
     _root: TreeNode object
@@ -152,13 +169,13 @@ class BinarySearchTree:
             return self._root.data
         return self._root
 
-    def add(self, element, start_point):
+    def add(self, element, start_point=None):
         """
         adds element to the binary\
         search tree.
         """
         if start_point is None:
-            start_point = TreeNode(element)
+            self._root = TreeNode(element)
             self.nodes += 1
         else:
             if start_point.data > element:
@@ -174,7 +191,7 @@ class BinarySearchTree:
                 else:
                     self.add(element, start_point.right)
             else:
-                return "this element already exists in binary search tree"
+                print("this element already exists in binary search tree")
 
     def get_leaves(self):
         """
@@ -205,7 +222,7 @@ class BinarySearchTree:
                 path.append(self._up(node).data)
                 node = self._up(node)
             if len(path) > 0:
-                return path
+                return path[::-1]
             else:
                 return "element does not exist"
 
@@ -265,6 +282,8 @@ class BinarySearchTree:
         returns string representation\
         of binary search tree.
         """
+        if self._root is None:
+            return "the tree is empty"
         levels = self.bfs()
         max_len = len(levels[-1]) * 2 - 1
         result = ""
@@ -285,7 +304,7 @@ class BinarySearchTree:
                 result += "_ " * int(((max_len - len(level))/2))
                 result += "\n"
         return result[:-1]
-        
+
     def inorder(self, root):
         """
         inorder traversal.
@@ -374,3 +393,71 @@ class BinarySearchTree:
             return tree_node.left is None and tree_node.right is None
         else:
             return None
+
+    def rebalance(self, node_val=None):
+        """
+        changes existing binary search tree.
+        returns new rebalanced tree.
+        """
+        nodes = self.inorder(self._root.data)
+        nodes.sort()
+        if node_val is not None:
+            try:
+                nodes.remove(node_val)
+            except:
+                print("the tree does not contain this node value")
+        self.delete_all_nodes()
+        if len(nodes) % 2 == 1:
+            middle = int((len(nodes) - 1) / 2)
+        else:
+            middle = int(len(nodes) / 2)
+        first_part = nodes[:middle]
+        root = nodes[middle]
+        second_part = nodes[middle+1:]
+        self.add(root)
+        while len(first_part) != 0 or len(second_part) != 0:
+            length1 = len(first_part)
+            length2 = len(second_part)
+            root = self.get_root()
+            if length1 == 0:
+                pass
+            else:
+                if length1 % 2 == 1:
+                    middle1 = int((length1 - 1) / 2)
+                else:
+                    middle1 = int(length1 / 2)
+                self.add(first_part.pop(middle1), root)
+            if length2 == 0:
+                pass
+            else:
+                if length2 % 2 == 1:
+                    middle2 = int((length2 - 1) / 2)
+                else:
+                    middle2 = int(length2 / 2)
+                self.add(second_part.pop(middle2), root)
+
+    def delete_all_nodes(self):
+        """
+        deletes all nodes in binary search tree.
+        return empty tree.
+        """
+        self._recurse_for_deleting(self._root)
+        self._root = None
+        self.nodes = 0
+
+    def _recurse_for_deleting(self, node):
+        """
+        recursive function for deleting all nodes.
+        """
+        if node is not None:
+            self._recurse_for_deleting(node.left)
+            self._recurse_for_deleting(node.right)
+            node.left = None
+            node.right = None
+
+    def delete_node(self, node):
+        """
+        deletes specific node and returns\
+        rebalanced tree.
+        """
+        self.rebalance(node_val=node)
